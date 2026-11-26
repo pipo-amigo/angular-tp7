@@ -1,0 +1,23 @@
+<h1>Mes inscriptions</h1>
+<p>Bonjour {{ session.nom() }}</p>
+
+@if (erreur()) {
+  <p class="alerte-erreur">{{ erreur() }}</p>
+}
+
+@for (i of inscriptions.liste(); track i.id) {
+  <article class="carte-inscription">
+    <h2>{{ titre(i.coursId) }}</h2>
+    <p>Inscrit le {{ i.date | date: 'dd/MM/yyyy' }}</p>
+    <label>Niveau :
+      <select #sel (change)="changerNiveau(i.id, sel.value)">
+        @for (n of niveaux; track n.valeur) {
+          <option [value]="n.valeur" [selected]="n.valeur === i.niveau">{{ n.libelle }}</option>
+        }
+      </select>
+    </label>
+    <button (click)="annuler(i.id)">Annuler l'inscription</button>
+  </article>
+} @empty {
+  <p>Aucune inscription pour le moment. <a routerLink="/cours">Parcourir le catalogue</a></p>
+}
